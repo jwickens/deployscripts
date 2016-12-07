@@ -97,7 +97,7 @@ map_url_route_to_container_group (){
     local ROUTE_EXISTS=$?
     if [ ${ROUTE_EXISTS} -ne 0 ]; then
         # make sure we are using CF from our extension so that we can always call target.   
-        local MYSPACE=$(${EXT_DIR}/cf target | grep Space | awk '{print $2}' | sed 's/ //g')
+        local MYSPACE=$(${EXT_DIR}/cf target | grep Space | awk -F ':' '{print $2}' | sed 's/^[ \t]*//;s/[ \t]*$//')
         log_and_echo "Route does not exist, attempting to create for ${HOSTNAME} ${DOMAIN} in ${MYSPACE}"
         cf create-route ${MYSPACE} ${DOMAIN} -n ${HOSTNAME}
         RESULT=$?
